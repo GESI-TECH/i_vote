@@ -23,6 +23,7 @@ CREATED_APPS = [
     'etudiants',
     'elections',
     'votes',
+    'academique',
 ]
 
 DJANGO_APPS = [
@@ -123,3 +124,6 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+#Model utilisateur 
+AUTH_USER_MODEL = "comptes.Utilisateur"
