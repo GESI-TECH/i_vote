@@ -164,3 +164,82 @@ class PromotionModelTest(TestCase):
             str(self.promotion),
             "L1 : Licence 1 - Science de l'ingénieur"
         )
+
+class FiliereModelTest(TestCase):
+    def setUp(self):
+        self.faculte = Faculte.objects.create(
+                nom = "Faculté des sciences et technologies appliqués",
+                code = "FSTA"
+            )
+        self.departement = Departement.objects.create(
+            nom = "Science de l'ingénieur",
+            code= "D-SI-01",
+            faculte = self.faculte
+        )
+
+        self.promotion = Promotion.objects.create(
+            nom = "Licence 1",
+            code = "L1",
+            departement = self.departement
+        )
+
+        self.filiere = Filiere.objects.create(
+            nom = "Génie informatique",
+            code = "GI",
+            promotion = self.promotion
+        )
+
+    def test_filiere_creation(self):
+        self.assertEqual(
+            self.filiere.nom,
+            "Génie informatique"
+        )
+
+        self.assertEqual(
+            self.filiere.code,
+            "GI"
+        )
+
+    def test_filiere_associe_promotion(self):
+        self.assertEqual(
+            self.filiere.promotion,
+            self.promotion
+        )
+
+    def test_filiere_associe_departement_et_faculte(self):
+        self.assertEqual(
+            self.filiere.promotion.departement,
+            self.departement
+        )
+        self.assertEqual(
+            self.filiere.promotion.departement.faculte,
+            self.faculte
+        )
+
+    def test_promotion_access_filiere(self):
+        self.assertIn(
+            self.filiere,
+            self.promotion.filieres.all()
+        )
+
+    def test_unique_filiere_nom(self):
+        with self.assertRaises(IntegrityError):
+            Filiere.objects.create(
+                nom = "Génie informatique",
+                code= "AUTRE",
+                promotion = self.promotion
+            )
+
+    def test_unique_filiere_code(self):
+        with self.assertRaises(IntegrityError):
+            Filiere.objects.create(
+                nom = "Autre nom",
+                code= "GI",
+                promotion = self.promotion
+            )
+
+    def test_string_representation(self):
+        self.assertEqual(
+            str(self.filiere),
+            "GI : Génie informatique - Licence 1"
+        )
