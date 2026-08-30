@@ -94,3 +94,73 @@ class DepartementModelTest(TestCase):
             str(self.departement),
             "D-SI-01 : Science de l'ingénieur - Faculté des sciences et technologies appliqués"
         )
+
+
+class PromotionModelTest(TestCase):
+    def setUp(self):
+        self.faculte = Faculte.objects.create(
+                nom = "Faculté des sciences et technologies appliqués",
+                code = "FSTA"
+            )
+        self.departement = Departement.objects.create(
+            nom = "Science de l'ingénieur",
+            code= "D-SI-01",
+            faculte = self.faculte
+        )
+
+        self.promotion = Promotion.objects.create(
+            nom = "Licence 1",
+            code = "L1",
+            departement = self.departement
+        )
+
+    def test_promotion_creation(self):
+        self.assertEqual(
+            self.promotion.nom,
+            "Licence 1"
+        )
+
+        self.assertEqual(
+            self.promotion.code,
+            "L1"
+        )
+
+    def test_promotion_associe_departement(self):
+        self.assertEqual(
+            self.promotion.departement,
+            self.departement
+        )
+
+    def test_promotion_associe_faculte(self):
+            self.assertEqual(
+                self.promotion.departement.faculte,
+                self.faculte
+            )
+
+    def test_departement_access_promotion(self):
+        self.assertIn(
+            self.promotion,
+            self.departement.promotions.all()
+        )
+
+    def test_unique_promotion_nom(self):
+        with self.assertRaises(IntegrityError):
+            Promotion.objects.create(
+                nom = "Licence 1",
+                code= "AUTRE",
+                departement = self.departement
+            )
+
+    def test_unique_promotion_code(self):
+        with self.assertRaises(IntegrityError):
+            Promotion.objects.create(
+                nom = "Autre nom",
+                code= "L1",
+                departement = self.departement
+            )
+
+    def test_string_representation(self):
+        self.assertEqual(
+            str(self.promotion),
+            "L1 : Licence 1 - Science de l'ingénieur"
+        )
