@@ -29,7 +29,7 @@ class Departement(models.Model):
         )
     faculte = models.ForeignKey(
         "Faculte",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="departements"
         )
     created_at = models.DateTimeField(auto_now_add=True)

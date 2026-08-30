@@ -8,10 +8,7 @@ class ProfileEtudiant(models.Model):
         on_delete = models.CASCADE,
         related_name = "profile_etudiant")
     
-    matricule = models.IntegerField(
-        max_length=100, 
-        unique=True
-        )
+    matricule = models.CharField(max_length=100, unique=True)
 
     nom = models.CharField(max_length=50)
     post_nom = models.CharField(max_length=50)
