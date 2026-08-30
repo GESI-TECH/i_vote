@@ -36,7 +36,7 @@ class Departement(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.code} : {self.nom}-{self.faculte.nom}"
+        return f"{self.code} : {self.nom} - {self.faculte.nom}"
 
 class Promotion(models.Model):
 
@@ -51,7 +51,7 @@ class Promotion(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-            return f"{self.code} : {self.nom}-{self.departement.nom}"
+            return f"{self.code} : {self.nom} - {self.departement.nom}"
 
 class Filiere(models.Model):
     nom = models.CharField(
