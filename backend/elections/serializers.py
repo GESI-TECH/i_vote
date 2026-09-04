@@ -1,7 +1,5 @@
 from rest_framework import serializers
-
-from elections.models import Election
-
+from elections.models import Election, Candidate
 
 class ElectionSerializer(serializers.ModelSerializer):
 
@@ -51,5 +49,59 @@ class ElectionSerializer(serializers.ModelSerializer):
                     "Sélectionnez soit une promotion, "
                     "soit au moins une filière."
                 )
+
+        return attrs
+
+class CandidateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Candidate
+        fields = "__all__"
+
+    def validate(self, attrs):
+        election = attrs.get("election")
+        etudiant = attrs.get("etudiant")
+
+        if not election or not etudiant:
+            return attrs
+
+        # Porte-parole
+        if election.election_type == Election.Type.PORTE_PAROLE:
+            return attrs
+
+        # Président facultaire
+        if election.election_type == Election.Type.PREFAC:
+            student_faculte = (
+                etudiant.filiere.promotion.departement.faculte
+            )
+
+            if student_faculte != election.faculte:
+                raise serializers.ValidationError(
+                    "Cet étudiant n'appartient pas à la faculté "
+                    "concernée par cette élection."
+                )
+
+        # Chef de promotion
+        elif election.election_type == Election.Type.CP:
+
+            # Élection liée à une promotion précise
+            if election.promotion:
+                if etudiant.filiere.promotion != election.promotion:
+                    raise serializers.ValidationError(
+                        "Cet étudiant n'appartient pas à la promotion "
+                        "concernée par cette élection."
+                    )
+
+            # Élection liée à plusieurs filières
+            elif election.filieres.exists():
+                student_filiere = etudiant.filiere
+
+                if not election.filieres.filter(
+                    id=student_filiere.id
+                ).exists():
+                    raise serializers.ValidationError(
+                        "Cet étudiant n'appartient à aucune des filières "
+                        "concernées par cette élection."
+                    )
 
         return attrs
