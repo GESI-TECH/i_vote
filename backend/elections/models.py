@@ -44,3 +44,42 @@ class Election(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Candidate(models.Model):
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["election", "etudiant"],
+                name="unique_candidate_per_election"
+            )
+        ]
+    election = models.ForeignKey(
+        "Election",
+        on_delete=models.CASCADE,
+        related_name="candidates"
+    )
+
+    etudiant = models.ForeignKey(
+        "etudiants.ProfileEtudiant",
+        on_delete=models.PROTECT,
+        related_name="candidatures"
+    )
+
+    programme = models.TextField(blank=True)
+
+    statut = models.CharField(
+        max_length=20,
+        choices=[
+            ("PENDING", "En attente"),
+            ("APPROVED", "Approuvée"),
+            ("REJECTED", "Rejetée"),
+        ],
+        default="PENDING"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student} - {self.election}"
