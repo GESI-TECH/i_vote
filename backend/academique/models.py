@@ -39,17 +39,22 @@ class Departement(models.Model):
         return f"{self.code} : {self.nom} - {self.faculte.nom}"
 
 class Promotion(models.Model):
+    nom = models.CharField(max_length=100)
+    code = models.CharField(max_length=10)
 
-    nom = models.CharField(max_length=100,unique=True)
-    code = models.CharField(max_length=10, unique=True)
     departement = models.ForeignKey(
         "Departement",
         on_delete=models.PROTECT,
         related_name="promotions"
-        )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    )
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["nom", "departement"],
+                name="unique_promotion_per_departement"
+            )
+        ]
     def __str__(self):
             return f"{self.code} : {self.nom} - {self.departement.nom}"
 
