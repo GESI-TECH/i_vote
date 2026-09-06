@@ -14,9 +14,11 @@ from academique.models import (
 from etudiants.models import ProfileEtudiant
 from elections.models import Election
 from elections.serializers import CandidateSerializer
+from elections.tests.tools import create_test_image
 
 
 User = get_user_model()
+
 
 
 class CandidateSerializerTest(TestCase):
@@ -89,19 +91,19 @@ class CandidateSerializerTest(TestCase):
         self.user_droit.save()
 
         self.etudiant_info = ProfileEtudiant.objects.create(
-            user=self.user_info,
+            utilisateur=self.user_info,
             matricule="INFO001",
             filiere=self.filiere_genie_info
         )
 
         self.etudiant_reseaux = ProfileEtudiant.objects.create(
-            user=self.user_reseaux,
+            utilisateur=self.user_reseaux,
             matricule="INFO002",
             filiere=self.filiere_reseaux
         )
 
         self.etudiant_droit = ProfileEtudiant.objects.create(
-            user=self.user_droit,
+            utilisateur=self.user_droit,
             matricule="DRT001",
             filiere=self.filiere_droit_prive
         )
@@ -115,9 +117,12 @@ class CandidateSerializerTest(TestCase):
             fin=self.fin
         )
 
+        image = create_test_image()
+
         data = {
             "election": election.id,
             "etudiant": self.etudiant_droit.id,
+            "image": image,
             "programme": "Représenter tous les étudiants."
         }
 
@@ -328,9 +333,12 @@ class CandidateSerializerTest(TestCase):
             fin=self.fin
         )
 
+        image = create_test_image()
+
         data = {
             "election": election.id,
             "etudiant": self.etudiant_info.id,
+            "image": image,
             "programme": "Améliorer la représentation étudiante."
         }
 

@@ -1,12 +1,15 @@
 from django.db import IntegrityError
 from django.db.models import ProtectedError
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.utils import timezone
 from datetime import timedelta
+from tempfile import TemporaryDirectory
+
 
 from academique.models import Faculte, Filiere, Promotion, Departement
 from elections.models import Election, Candidate
 from etudiants.models import ProfileEtudiant
+from elections.tests.tools import create_test_image
 
 from django.contrib.auth import get_user_model
 
@@ -125,6 +128,12 @@ class ElectionModelTest(TestCase):
 class CandidateModelTest(TestCase):
 
     def setUp(self):
+        media_root = TemporaryDirectory()
+        self.addCleanup(media_root.cleanup)
+        media_settings = override_settings(MEDIA_ROOT=media_root.name)
+        media_settings.enable()
+        self.addCleanup(media_settings.disable)
+
         self.user = User(email="student@example.com")
         self.user.set_password("StrongPassword123!")
         self.user.save()
@@ -175,6 +184,7 @@ class CandidateModelTest(TestCase):
         self.candidate = Candidate.objects.create(
             election=self.election,
             etudiant=self.etudiant,
+            image=create_test_image(),
             programme="Améliorer la communication entre les étudiants."
         )
 
@@ -194,6 +204,24 @@ class CandidateModelTest(TestCase):
             self.candidate.statut,
             "PENDING"
         )
+
+    def test_candidate_image_is_saved(self):
+        self.candidate.refresh_from_db()
+
+        self.assertEqual(self.candidate.image.name, "candidates/candidate.jpeg")
+        self.assertTrue(
+            self.candidate.image.storage.exists(self.candidate.image.name)
+        )
+        with self.candidate.image.open("rb") as saved_image:
+            self.assertEqual(saved_image.read(), create_test_image().read())
+
+    def test_candidate_image_is_optional(self):
+        self.candidate.image = None
+        self.candidate.full_clean()
+        self.candidate.save()
+        self.candidate.refresh_from_db()
+
+        self.assertFalse(self.candidate.image)
 
     def test_candidate_programme(self):
         self.assertEqual(
@@ -246,6 +274,8 @@ class CandidateModelTest(TestCase):
             Candidate.objects.count(),
             2
         )
+        second_candidate.refresh_from_db()
+        self.assertFalse(second_candidate.image)
 
     def test_candidate_deleted_when_election_deleted(self):
         candidate_id = self.candidate.id
