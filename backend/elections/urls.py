@@ -14,4 +14,4 @@ router.register(
     basename="candidate"
 )
 
-urlspatterns = router.urls 
+urlpatterns = router.urls 
