@@ -79,6 +79,12 @@ class Candidate(models.Model):
         default="PENDING"
     )
 
+    image = models.ImageField(
+        upload_to="candidates/",
+        blank=True,
+        null=True
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
