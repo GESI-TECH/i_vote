@@ -29,7 +29,7 @@ function Sidebar({ isOpen = false, onClose }) {
         />
       )}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-transform md:static md:z-0 md:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed inset-y-0 left-0 z-40 w-[min(16rem,calc(100vw-2rem))] border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-transform md:static md:z-0 md:w-64 md:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-5 md:hidden">
           <span className="text-sm font-semibold text-sidebar-foreground">
@@ -44,8 +44,8 @@ function Sidebar({ isOpen = false, onClose }) {
             <X size={19} aria-hidden="true" />
           </button>
         </div>
-        <div className="flex h-full flex-col px-3 py-5">
-          <div className="mb-6 flex items-center gap-3 px-3">
+        <div className="flex h-full flex-col px-2 py-4 sm:px-3 sm:py-5">
+          <div className="mb-5 flex items-center gap-3 px-3 sm:mb-6">
             <ShieldCheck
               className="text-sidebar-primary"
               size={22}
