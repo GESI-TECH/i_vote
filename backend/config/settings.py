@@ -34,6 +34,7 @@ DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_spectacular',
 ]
 
 INSTALLED_APPS = CREATED_APPS + DJANGO_APPS
@@ -130,3 +131,7 @@ MAILERS = {
 AUTH_USER_MODEL = "comptes.Utilisateur"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
