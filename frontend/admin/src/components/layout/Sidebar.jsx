@@ -1,8 +1,9 @@
 import {
-  BarChart3,
-  CalendarDays,
+  BookOpen,
+  Building2,
+  GraduationCap,
   LayoutDashboard,
-  Settings,
+  Network,
   ShieldCheck,
   Users,
   X,
@@ -11,10 +12,11 @@ import { NavLink } from "react-router-dom";
 
 const navigationItems = [
   { label: "Tableau de bord", to: "/dashboard", icon: LayoutDashboard },
-  { label: "Élections", to: "/elections", icon: CalendarDays },
-  { label: "Candidats", to: "/candidates", icon: Users },
-  { label: "Résultats", to: "/results", icon: BarChart3 },
-  { label: "Paramètres", to: "/settings", icon: Settings },
+  { label: "Facultés", to: "/facultes", icon: Building2 },
+  { label: "Départements", to: "/departements", icon: Network },
+  { label: "Promotions", to: "/promotions", icon: GraduationCap },
+  { label: "Filières", to: "/filieres", icon: BookOpen },
+  { label: "Étudiants", to: "/etudiants", icon: Users },
 ];
 
 function Sidebar({ isOpen = false, onClose }) {
@@ -56,7 +58,7 @@ function Sidebar({ isOpen = false, onClose }) {
                 Espace admin
               </p>
               <p className="text-xs text-muted-foreground">
-                Gestion des élections
+                Gestion académique
               </p>
             </div>
           </div>
@@ -68,6 +70,7 @@ function Sidebar({ isOpen = false, onClose }) {
                   `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${isActive ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"}`
                 }
                 to={to}
+                end={to === "/dashboard"}
                 onClick={onClose}
               >
                 <Icon size={18} aria-hidden="true" />
