@@ -40,7 +40,7 @@ class UserManager(BaseUserManager):
             **extra_fields
         )
 
-class Utilisateur(AbstractUser):
+class User(AbstractUser):
     username = None 
     email = models.EmailField(unique = True)
     USERNAME_FIELD = "email"

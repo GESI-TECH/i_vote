@@ -20,10 +20,7 @@ ALLOWED_HOSTS = []
 # Application definition
 CREATED_APPS = [
     'comptes',
-    'etudiants',
-    'elections',
-    'votes',
-    'academique',
+    'core'
 ]
 
 DJANGO_APPS = [
