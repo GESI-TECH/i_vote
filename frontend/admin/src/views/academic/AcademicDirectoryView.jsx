@@ -2,9 +2,7 @@ import { Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import AdminLayout from "../../components/layout/AdminLayout";
 import {
-  getDepartments,
   getFaculties,
-  getFilieres,
   getPromotions,
   getStudents,
 } from "../../repositories/studentRepository";
@@ -15,7 +13,6 @@ function findById(items, id) {
 
 function getDirectory(resource) {
   const faculties = getFaculties();
-  const departments = getDepartments();
   const promotions = getPromotions();
 
   const directories = {
@@ -29,55 +26,20 @@ function getDirectory(resource) {
       ],
       rows: faculties,
     },
-    departements: {
-      title: "Départements",
-      description: "Départements et facultés de rattachement.",
-      columns: [
-        { key: "name", label: "Département" },
-        { key: "code", label: "Code" },
-        { key: "facultyName", label: "Faculté" },
-      ],
-      rows: departments.map((department) => ({
-        ...department,
-        facultyName:
-          findById(faculties, department.facultieId ?? department.facultyId)
-            ?.name ?? "Non renseignée",
-      })),
-    },
     promotions: {
       title: "Promotions",
-      description: "Promotions organisées par département.",
+      description: "Promotions rattachées à une faculté.",
       columns: [
         { key: "name", label: "Promotion" },
         { key: "code", label: "Code" },
-        { key: "departmentName", label: "Département" },
+        { key: "facultyName", label: "Faculté" },
       ],
       rows: promotions.map((promotion) => ({
         ...promotion,
-        departmentName:
-          findById(departments, promotion.departmentId)?.name ??
-          "Non renseigné",
+        facultyName:
+          findById(faculties, promotion.facultyId ?? promotion.faculteId)?.name ??
+          "Non renseignée",
       })),
-    },
-    filieres: {
-      title: "Filières",
-      description: "Filières rattachées à leur promotion et département.",
-      columns: [
-        { key: "name", label: "Filière" },
-        { key: "code", label: "Code" },
-        { key: "promotionName", label: "Promotion" },
-        { key: "departmentName", label: "Département" },
-      ],
-      rows: getFilieres().map((filiere) => {
-        const promotion = findById(promotions, filiere.promotionId);
-        return {
-          ...filiere,
-          promotionName: promotion?.name ?? "Non renseignée",
-          departmentName:
-            findById(departments, promotion?.departmentId)?.name ??
-            "Non renseigné",
-        };
-      }),
     },
     etudiants: {
       title: "Étudiants",
@@ -88,21 +50,15 @@ function getDirectory(resource) {
         { key: "birthDate", label: "Date de naissance" },
         { key: "genderLabel", label: "Genre" },
         { key: "promotionName", label: "Promotion" },
-        { key: "departmentName", label: "Département" },
         { key: "facultyName", label: "Faculté" },
       ],
       rows: getStudents().map((student) => {
         const promotion =
           findById(promotions, student.promotionId) ??
           promotions.find((item) => item.name === student.promotion);
-        const department =
-          findById(
-            departments,
-            student.departmentId ?? promotion?.departmentId,
-          ) ?? null;
         const faculty = findById(
           faculties,
-          student.facultyId ?? department?.facultieId ?? department?.facultyId,
+          student.facultyId ?? student.facultieId ?? promotion?.facultyId,
         );
 
         return {
@@ -115,7 +71,6 @@ function getDirectory(resource) {
                 : "Non renseigné",
           promotionName:
             promotion?.name ?? student.promotion ?? "Non renseignée",
-          departmentName: department?.name ?? "Non renseigné",
           facultyName: faculty?.name ?? "Non renseignée",
         };
       }),

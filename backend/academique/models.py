@@ -18,32 +18,12 @@ class Faculte(models.Model):
     def __str__(self):
         return f"{self.code} : {self.nom}"
 
-class Departement(models.Model):
-    nom = models.CharField(
-        max_length = 100, 
-        unique = True
-        )
-    code = models.CharField(
-        max_length = 10, 
-        unique = True
-        )
-    faculte = models.ForeignKey(
-        "Faculte",
-        on_delete=models.PROTECT,
-        related_name="departements"
-        )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"{self.code} : {self.nom} - {self.faculte.nom}"
-
 class Promotion(models.Model):
     nom = models.CharField(max_length=100)
     code = models.CharField(max_length=10)
 
-    departement = models.ForeignKey(
-        "Departement",
+    faculte = models.ForeignKey(
+        "Faculte",
         on_delete=models.PROTECT,
         related_name="promotions"
     )
@@ -54,32 +34,11 @@ class Promotion(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["nom", "departement"],
-                name="unique_promotion_per_departement"
+                fields=["nom", "faculte"],
+                name="unique_promotion_per_faculte"
             )
         ]
     def __str__(self):
-            return f"{self.code} : {self.nom} - {self.departement.nom}"
-
-class Filiere(models.Model):
-    nom = models.CharField(
-        max_length = 100, 
-        unique = True
-        )
-    code = models.CharField(
-        max_length = 10, 
-        unique = True
-        )
-    promotion = models.ForeignKey(
-        "Promotion",
-        on_delete=models.CASCADE,
-        related_name="filieres"
-        )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"{self.code} : {self.nom} - {self.promotion.nom}"
-    
+            return f"{self.code} : {self.nom} - {self.faculte.nom}"
 
 

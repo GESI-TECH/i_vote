@@ -29,26 +29,10 @@ function App() {
         }
       />
       <Route
-        path="/departements"
-        element={
-          <ProtectedRoute>
-            <AcademicDirectoryView resource="departements" />
-          </ProtectedRoute>
-        }
-      />
-      <Route
         path="/promotions"
         element={
           <ProtectedRoute>
             <AcademicDirectoryView resource="promotions" />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/filieres"
-        element={
-          <ProtectedRoute>
-            <AcademicDirectoryView resource="filieres" />
           </ProtectedRoute>
         }
       />

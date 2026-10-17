@@ -47,121 +47,24 @@ const defaultFaculties = [
   },
 ];
 
-const defaultDepartments = [
-  {
-    id: 1,
-    name: "GENI-INFORMATIQUE",
-    code: "INFO",
-    facultieId: 1,
-  },
-  {
-    id: 2,
-    name: "GENI-CIVILE",
-    code: "CIVIL",
-    facultieId: 1,
-  },
-
-  {
-    id: 3,
-    name: "GENI-ELECTRIQUE",
-    code: "ELEC",
-    facultieId: 1,
-  },
-  {
-    id: 4,
-    name: "GENI-MECANIQUE",
-    code: "MECAN",
-    facultieId: 1,
-  },
-  {
-    id: 5,
-    name: "THEOLOGIE-PROSTESTANTE",
-    code: "THEO",
-    facultieId: 3,
-  },
-  {
-    id: 6,
-    name: "MEDECINE-HUMAINE",
-    code: "MEDH",
-    facultieId: 5,
-  },
-  {
-    id: 7,
-    name: "SENTE-PUBLIQUE",
-    code: "SANT",
-    facultieId: 4,
-  },
-  {
-    id: 8,
-    name: "SCIENCES-ECONOMIQUES",
-    code: "ECON",
-    facultieId: 7,
-  },
-  {
-    id: 9,
-    name: "SCIENCES-DE-GESTION",
-    code: "GEST",
-    facultieId: 7,
-  },
-  {
-    id: 10,
-    name: "SCIENCES-JURIDIQUES",
-    code: "JURI",
-    facultieId: 2,
-  },
-  {
-    id: 11,
-    name: "SCIENCES-PSYCHOLOGIQUES",
-    code: "PSY",
-    facultieId: 6,
-  },
-  {
-    id: 12,
-    name: "SCIENCES-DE-L'EDUCATION",
-    code: "EDUC",
-    facultieId: 6,
-  },
-];
-
 const defaultPromotions = [
   {
     id: 1,
     name: "L3 Informatique",
     code: "L3-INFO",
-    departmentId: 1,
+    facultyId: 1,
   },
   {
     id: 2,
     name: "M1 Gestion",
     code: "M1-GEST",
-    departmentId: 9,
+    facultyId: 7,
   },
   {
     id: 3,
     name: "L2 Droit",
     code: "L2-JURI",
-    departmentId: 10,
-  },
-];
-
-const defaultFilieres = [
-  {
-    id: 1,
-    name: "Génie logiciel",
-    code: "GENLOG",
-    promotionId: 1,
-  },
-  {
-    id: 2,
-    name: "Réseaux et systèmes",
-    code: "RESEAUX",
-    promotionId: 1,
-  },
-  {
-    id: 3,
-    name: "Finance",
-    code: "FIN",
-    promotionId: 2,
+    facultyId: 2,
   },
 ];
 
@@ -173,9 +76,8 @@ const defaultStudents = [
     gender: "m",
     matricule: "20240001",
     promotion: "L3 Informatique",
-    departmentId: 1,
+    promotionId: 1,
     facultyId: 1,
-    department: "GENI-INFORMATIQUE",
     faculty: "Faculté des Sciences et technologies appliquées",
   },
   {
@@ -185,9 +87,8 @@ const defaultStudents = [
     gender: "f",
     matricule: "20240002",
     promotion: "M1 Gestion",
-    departmentId: 9,
+    promotionId: 2,
     facultyId: 7,
-    department: "SCIENCES-DE-GESTION",
     faculty: "Faculté des Sciences economiques et de gestion",
   },
   {
@@ -197,9 +98,8 @@ const defaultStudents = [
     gender: "m",
     matricule: "20240003",
     promotion: "L2 Droit",
-    departmentId: 10,
+    promotionId: 3,
     facultyId: 2,
-    department: "SCIENCES-JURIDIQUES",
     faculty: "Faculté des Sciences juridiques,politiques et administrative",
   },
 ];
@@ -225,10 +125,9 @@ function normalizePromotion(promotion = {}) {
     id: promotion.id ?? generatePromotionId(),
     name: promotion.name ?? promotion.nom ?? "",
     code: promotion.code ?? "",
-    departmentId:
-      promotion.departmentId ??
-      promotion.departementId ??
-      promotion.departement ??
+    facultyId:
+      promotion.facultyId ??
+      promotion.faculteId ??
       "",
   };
 }
@@ -276,8 +175,8 @@ function normalizeStudent(student = {}) {
     gender: student.gender ?? student.genre ?? "",
     matricule: student.matricule ?? "",
     promotion: student.promotion ?? "",
-    departmentId: student.departmentId ?? student.departementId ?? "",
     facultyId: student.facultyId ?? student.faculteId ?? "",
+    promotionId: student.promotionId ?? "",
   };
 }
 
@@ -373,7 +272,6 @@ export function searchStudents(query = "") {
       student.gender,
       student.matricule,
       student.promotion,
-      student.department,
       student.faculty,
     ].filter(Boolean);
 
@@ -444,12 +342,10 @@ export function searchPromotions(query = "") {
   }
 
   return readPromotions().filter((promotion) => {
-    const department = defaultDepartments.find(
-      (item) => String(item.id) === String(promotion.departmentId),
+    const faculty = defaultFaculties.find(
+      (item) => String(item.id) === String(promotion.facultyId),
     );
-    const values = [promotion.name, promotion.code, department?.name].filter(
-      Boolean,
-    );
+    const values = [promotion.name, promotion.code, faculty?.name].filter(Boolean);
 
     return values.some((value) =>
       value.toString().toLowerCase().includes(normalizedQuery),
@@ -457,14 +353,6 @@ export function searchPromotions(query = "") {
   });
 }
 
-export function getDepartments() {
-  return [...defaultDepartments];
-}
-
 export function getFaculties() {
   return [...defaultFaculties];
-}
-
-export function getFilieres() {
-  return [...defaultFilieres];
 }
