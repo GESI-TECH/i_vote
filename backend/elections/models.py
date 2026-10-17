@@ -31,12 +31,6 @@ class Election(models.Model):
         related_name="elections"
     )
 
-    filieres = models.ManyToManyField(
-        "academique.Filiere",
-        blank=True,
-        related_name="elections"
-    )
-
     debut = models.DateTimeField()
     fin = models.DateTimeField()
 

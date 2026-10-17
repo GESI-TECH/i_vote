@@ -14,11 +14,16 @@ class ProfileEtudiant(models.Model):
     post_nom = models.CharField(max_length=50)
     prenom = models.CharField(max_length=50)
 
-    filiere = models.ForeignKey(
-        "academique.Filiere",
+    faculte = models.ForeignKey(
+        "academique.Faculte",
         on_delete=models.PROTECT,
-        related_name="etudiants"
-        )
+        related_name="etudiants",
+    )
+    promotion = models.ForeignKey(
+        "academique.Promotion",
+        on_delete=models.PROTECT,
+        related_name="etudiants",
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

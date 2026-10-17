@@ -2,17 +2,13 @@ import AdminLayout from "../../components/layout/AdminLayout";
 import { getCurrentSession } from "../../services/authService";
 import {
   ArrowUpRight,
-  BookOpen,
   Building2,
   GraduationCap,
-  Network,
   Users,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
-  getDepartments,
   getFaculties,
-  getFilieres,
   getPromotions,
   getStudents,
 } from "../../repositories/studentRepository";
@@ -25,22 +21,10 @@ const academicLinks = [
     icon: Building2,
   },
   {
-    title: "Départements",
-    description: "Explorer les départements et leurs facultés.",
-    to: "/departements",
-    icon: Network,
-  },
-  {
     title: "Promotions",
-    description: "Voir les promotions par département.",
+    description: "Voir les promotions par faculté.",
     to: "/promotions",
     icon: GraduationCap,
-  },
-  {
-    title: "Filières",
-    description: "Consulter les filières par promotion.",
-    to: "/filieres",
-    icon: BookOpen,
   },
   {
     title: "Étudiants",
@@ -54,9 +38,7 @@ function DashboardView() {
   const session = getCurrentSession();
   const metrics = [
     { label: "Facultés", value: getFaculties().length },
-    { label: "Départements", value: getDepartments().length },
     { label: "Promotions", value: getPromotions().length },
-    { label: "Filières", value: getFilieres().length },
     { label: "Étudiants", value: getStudents().length },
   ];
 

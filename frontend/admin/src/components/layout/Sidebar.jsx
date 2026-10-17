@@ -1,9 +1,7 @@
 import {
-  BookOpen,
   Building2,
   GraduationCap,
   LayoutDashboard,
-  Network,
   ShieldCheck,
   Users,
   X,
@@ -13,9 +11,7 @@ import { NavLink } from "react-router-dom";
 const navigationItems = [
   { label: "Tableau de bord", to: "/dashboard", icon: LayoutDashboard },
   { label: "Facultés", to: "/facultes", icon: Building2 },
-  { label: "Départements", to: "/departements", icon: Network },
   { label: "Promotions", to: "/promotions", icon: GraduationCap },
-  { label: "Filières", to: "/filieres", icon: BookOpen },
   { label: "Étudiants", to: "/etudiants", icon: Users },
 ];
 
