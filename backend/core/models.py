@@ -1,8 +1,8 @@
 from django.db import models
 from comptes.models import User
-from academic_structure import ACADEMIC_STRUCTURE
+from core.academic_structure import ACADEMIC_STRUCTURE
 
-FACULTY_CHOICES = [(data["code"],faculty) for faculty, data in ACADEMIC_STRUCTURE.values()]
+FACULTY_CHOICES = [(data["code"],faculty) for faculty, data in ACADEMIC_STRUCTURE.items()]
 PROMOTION_CHOICES = sorted({
     (promotion, promotion)
     for data in ACADEMIC_STRUCTURE.values()

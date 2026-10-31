@@ -125,7 +125,7 @@ MAILERS = {
 }
 
 #Model utilisateur 
-AUTH_USER_MODEL = "comptes.Utilisateur"
+AUTH_USER_MODEL = "comptes.User"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
